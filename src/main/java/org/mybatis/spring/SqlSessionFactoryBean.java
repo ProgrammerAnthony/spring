@@ -82,7 +82,7 @@ import org.springframework.util.ClassUtils;
  * @author Eduardo Macarron
  * @author Eddú Meléndez
  * @author Kazuki Shimizu
- *
+ * MyBatis 与 Spring 集成后，MyBatis 中的 SqlSessionFactory 对象是由 SqlSessionFactoryBean 创建的。
  * @see #setConfigLocation
  * @see #setDataSource
  */
@@ -480,6 +480,7 @@ public class SqlSessionFactoryBean
 
   /**
    * {@inheritDoc}
+   * 在 Bean 初始化的时候，会执行 afterPropertiesSet() 方法，最后会调用 buildSqlSessionFactory() 方法创建 SqlSessionFactory。
    */
   @Override
   public void afterPropertiesSet() throws Exception {

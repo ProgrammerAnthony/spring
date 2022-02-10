@@ -48,7 +48,7 @@ import org.springframework.beans.factory.FactoryBean;
  * Note that this factory can only inject <em>interfaces</em>, not concrete classes.
  *
  * @author Eduardo Macarron
- *
+ *  MapperFactoryBean 类，它是 MyBatis-Spring 提供的一个动态代理的实现，可以直接将 Mapper 接口注入到 Service 层的 Bean 中，这样就不需要编写任何 DAO 实现的代码。
  * @see SqlSessionTemplate
  */
 public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements FactoryBean<T> {
@@ -77,6 +77,7 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
     Configuration configuration = getSqlSession().getConfiguration();
     if (this.addToConfig && !configuration.hasMapper(this.mapperInterface)) {
       try {
+        //所有mapper都会被configuration保管
         configuration.addMapper(this.mapperInterface);
       } catch (Exception e) {
         logger.error("Error while adding the mapper '" + this.mapperInterface + "' to configuration.", e);

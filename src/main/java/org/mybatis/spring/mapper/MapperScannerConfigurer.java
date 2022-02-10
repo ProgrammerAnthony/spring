@@ -81,7 +81,8 @@ import org.springframework.util.StringUtils;
  *   </bean>
  * }
  * </pre>
- *
+ * 实现了 BeanDefinitionRegistryPostProcessor 接口，该接口中的 postProcessBeanDefinitionRegistry()
+ * 方法会在系统初始化的过程中被调用，该方法扫描了配置文件中配置的basePackage 下的所有 Mapper 类，最终生成 Spring 的 Bean 对象
  * @author Hunter Presnall
  * @author Eduardo Macarron
  *
@@ -353,7 +354,7 @@ public class MapperScannerConfigurer
     if (this.processPropertyPlaceHolders) {
       processPropertyPlaceHolders();
     }
-
+    // 创建ClassPathMapperScanner对象
     ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
     scanner.setAddToConfig(this.addToConfig);
     scanner.setAnnotationClass(this.annotationClass);
@@ -371,6 +372,9 @@ public class MapperScannerConfigurer
     if (StringUtils.hasText(defaultScope)) {
       scanner.setDefaultScope(defaultScope);
     }
+    // 根据上面的配置，生成相应的过滤器。这些过滤器在扫描过程中会过滤掉不符合添加的内容，例如，
+    // annotationClass字段不为null时，则会添加AnnotationTypeFilter过滤器，通过该过滤器
+    // 实现只扫描annotationClass注解标识的接口的功能
     scanner.registerFilters();
     scanner.scan(
         StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
